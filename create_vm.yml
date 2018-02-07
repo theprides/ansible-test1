@@ -12,7 +12,7 @@
      state: present
      name: "{{ inventory_hostname }}"
      template: "template-ubuntu-16.04-64bit-8gb-v1.0"
-     cluster: {{ cluster }}
+     cluster: "{{ cluster }}"
      resource_pool: "{{ resource_pool }}"
      datacenter: "{{ datacenter }}"
      guest_id: "ubuntu64Guest"
