@@ -1,0 +1,16 @@
+---
+- name: PowerOn Virtual Machine(s)
+  hosts: all
+  gather_facts: true
+  connection: local
+  tasks:
+  - vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter }}"
+      cluster: "{{ cluster }}"
+      folder: "{{ datacenter }}/vm/{{ vmfolder }}"
+      name: "{{ inventory_hostname }}"
+      state: poweredon
+      validate_certs: no
