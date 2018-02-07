@@ -11,14 +11,14 @@
      validate_certs: no
      state: present
      name: "{{ inventory_hostname }}"
-     template: template-ubuntu-16.04-64bit-8gb-v1.0
+     template: "template-ubuntu-16.04-64bit-8gb-v1.0"
      cluster: {{ cluster }}
      resource_pool: "{{ resource_pool }}"
      datacenter: "{{ datacenter }}"
-     guest_id: ubuntu64Guest
+     guest_id: "ubuntu64Guest"
      disk:
      - size_gb: 10
-       type: thin
+       type: "thin"
        autoselect_datastore: yes
        datastore: "{{ datastore }}"
      wait_for_ip_address: yes
