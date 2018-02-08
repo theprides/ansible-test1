@@ -11,6 +11,7 @@
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"
         name: "{{ inventory_hostname }}"
+        validate_certs: no
         state: "poweredoff"
       when: state == "absent"
 
@@ -20,4 +21,5 @@
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"
         name: "{{ inventory_hostname }}"
+        validate_certs: no
         state: "{{ state }}"
