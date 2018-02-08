@@ -13,4 +13,4 @@
       folder: "{{ datacenter }}/vm/{{ vmfolder }}"
       name: "{{ inventory_hostname }}"
       validate_certs: no
-      state: {{ state }}
+      state: "{{ state }}"
