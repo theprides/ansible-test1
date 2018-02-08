@@ -10,6 +10,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"
+        datacenter: "{{ datacenter }}"
         name: "{{ inventory_hostname }}"
         validate_certs: no
         state: "poweredoff"
@@ -20,6 +21,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"
+        datacenter: "{{ datacenter }}"
         name: "{{ inventory_hostname }}"
         validate_certs: no
         state: "{{ state }}"
