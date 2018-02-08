@@ -1,0 +1,23 @@
+---
+- hosts: all
+  gather_facts: false
+  connection: local
+  vars:
+    state: poweredon
+  tasks:
+    - name: Shutdown VM first if delete required
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_user }}"
+        password: "{{ vcenter_pass }}"
+        name: "{{ inventory_hostname }}"
+        state: "poweredoff"
+      when: state == "absent"
+
+    - name: Set VM to desired state
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_user }}"
+        password: "{{ vcenter_pass }}"
+        name: "{{ inventory_hostname }}"
+        state: "{{ state }}"
