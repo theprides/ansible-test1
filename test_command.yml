@@ -1,0 +1,8 @@
+---
+- name: test command module locally
+  hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: testing
+    command: cat /etc/motd
