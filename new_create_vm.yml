@@ -51,7 +51,6 @@
 
   - name: Update DNS A record on success
     nsupdate:
-      key_name: "nsupdate"
       key_secret: "+bFQtBCta7j2vWkjPkAFtgA=="
       server: "ns1.op-zone1.sfo1"
       zone: "op-zone1.sfo1"
