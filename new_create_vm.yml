@@ -54,7 +54,7 @@
       key_secret: "{{ dns_key_1 }}"
       server: "ns1.op-zone1.sfo1"
       zone: "op-zone1.sfo1"
-      record: "ansible"
+      record: "{{ inventory_hostname }}"
       value: "{{ ip_address }}"
       type: "A"
       state: present
