@@ -43,61 +43,31 @@
         computerName: "{{ inventory_hostname }}"
       validate_certs: no
       state: present
-    register: deploy
-    ignore_errors: True
+    register: vmstatus
 
   - debug:
       msg: "Deploy message is: {{ deploy }}"
 
-  - name: Update DNS A record on success
+  - name: Add DNS A record
     nsupdate:
-      key_secret: "{{ dns_key_1 }}"
-      server: "ns1.op-zone1.sfo1"
-      zone: "op-zone1.sfo1"
+      key_name: "{{ dns_key_name }}"
+      key_secret: "{{ dns_key_secret }}"
+      key_algorithm: "{{ dns_key_type }}"
+      server: "{{ dns_server }}"
+      zone: "{{ dns_zone }}"
       record: "{{ inventory_hostname }}"
       value: "{{ ip_address }}"
       type: "A"
       state: present
-    when: not deploy.failed
 
-# - name: Determine PTR record
-#   script: |
-#      blah
-#   |
-#
-# - name: Update DNS PTR record on success
-#   nsupdate:
-#     key_name: "nsupdate"
-#     key_secret: "+bFQtBCta7j2vWkjPkAFtgA=="
-#     server: "ns1.op-zone1.sfo1"
-#     zone: "op-zone1.sfo1"
-#     record: "ansible"
-#     value: "{{ ip_address }}"
-#     type: "PTR"
-#     state: present
-#   when: {{ deploy.failed == False }}
-#
-#nsupdate -k /opt/local-vco-scripts/keys/master.key.aus
-#server svc01.op-zone1.aus1
-#zone tnt4-zone1.aus1
-#update delete prd-tnl-pk-426.tnt4-zone1.aus1
-#send
-#update add prd-tnl-pk-426.tnt4-zone1.aus1 3000 A 10.136.12.78
-#send
-#zone 136.10.in-addr.arpa
-#update add 78.12.136.10.in-addr.arpa 3000 PTR prd-tnl-pk-426.tnt4-zone1.aus1
-#send
-#
-#*****Added host*****
-#Running at Fri Feb  9 01:24:35 2018
-#Deleting Host - [prd-tnl-pk-356.tnt4-zone1.aus1, 10.136.12.39, /opt/local-vco-scripts/keys/master.key.aus, tnt4-zone1.aus1]
-#nsupdate -k /opt/local-vco-scripts/keys/master.key.aus
-#server ns1.op-zone1.aus1
-#zone tnt4-zone1.aus1
-#update delete prd-tnl-pk-356.tnt4-zone1.aus1 A 10.136.12.39
-#send
-#zone 136.10.in-addr.arpa
-#update delete 39.12.136.10.in-addr.arpa PTR prd-tnl-pk-356.tnt4-zone1.aus1
-#send
-#
-#*****Deleted Host*****
+  - name: Add DNS PTR record
+    nsupdate:
+      key_name: "{{ dns_key_name }}"
+      key_secret: "{{ dns_key_secret }}"
+      key_algorithm: "{{ dns_key_type }}"
+      server: "{{ dns_server }}"
+      zone: "{{ vm_zone }}."
+      record: "{{ vm_arpa_name }}"
+      value: "{{ inventory_hostname }}."
+      type: "PTR"
+      state: present
