@@ -46,7 +46,7 @@
     register: vmstatus
 
   - debug:
-      msg: "Deploy message is: {{ deploy }}"
+      msg: "Deploy message is: {{ vmstatus }}"
 
   - name: Add DNS A record
     nsupdate:
@@ -59,6 +59,7 @@
       value: "{{ ip_address }}"
       type: "A"
       state: present
+    when: not vmstatus.failed
 
   - name: Add DNS PTR record
     nsupdate:
@@ -71,3 +72,4 @@
       value: "{{ inventory_hostname }}."
       type: "PTR"
       state: present
+    when: not vmstatus.failed
