@@ -51,7 +51,7 @@
 
   - name: Update DNS A record on success
     nsupdate:
-      key_secret: "+bFQtBCta7j2vWkjPkAFtgA=="
+      key_secret: "{{ dns_key_1 }}"
       server: "ns1.op-zone1.sfo1"
       zone: "op-zone1.sfo1"
       record: "ansible"
