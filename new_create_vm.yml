@@ -44,6 +44,7 @@
       validate_certs: no
       state: present
     register: deploy
+    ignore_errors: True
 
   - debug:
       msg: "Deploy message is: {{ deploy }}"
@@ -58,7 +59,7 @@
       value: "{{ ip_address }}"
       type: "A"
       state: present
-    when: {{ deploy.failed == False }}
+    when: not deploy.failed
 
 # - name: Determine PTR record
 #   script: |
