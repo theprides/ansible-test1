@@ -46,8 +46,7 @@
     register: deploy
 
   - debug:
-      var: deploy
-      verbosity: 4
+      msg: "Deploy message is: {{ deploy }}"
 
 #  - name: Update DNS record on success
 #
