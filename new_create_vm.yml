@@ -48,7 +48,34 @@
   - debug:
       msg: "Deploy message is: {{ deploy }}"
 
-#  - name: Update DNS record on success
+  - name: Update DNS A record on success
+    nsupdate:
+      key_name: "nsupdate"
+      key_secret: "+bFQtBCta7j2vWkjPkAFtgA=="
+      server: "ns1.op-zone1.sfo1"
+      zone: "op-zone1.sfo1"
+      record: "ansible"
+      value: "{{ ip_address }}"
+      type: "A"
+      state: present
+    when: {{ deploy.failed == False }}
+
+# - name: Determine PTR record
+#   script: |
+#      blah
+#   |
+#
+# - name: Update DNS PTR record on success
+#   nsupdate:
+#     key_name: "nsupdate"
+#     key_secret: "+bFQtBCta7j2vWkjPkAFtgA=="
+#     server: "ns1.op-zone1.sfo1"
+#     zone: "op-zone1.sfo1"
+#     record: "ansible"
+#     value: "{{ ip_address }}"
+#     type: "PTR"
+#     state: present
+#   when: {{ deploy.failed == False }}
 #
 #nsupdate -k /opt/local-vco-scripts/keys/master.key.aus
 #server svc01.op-zone1.aus1
