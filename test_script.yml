@@ -4,5 +4,5 @@
   connection: local
   tasks:
   - name: test script
-    script: /usr/bin/dns.sh {{ inventory_hostname }} {{ ip_address }} "245.3.192.10.in-addr.arpa"
+    script: /usr/bin/dns.sh {{ inventory_hostname }} {{ ip_address }} "244.3.192.10.in-addr.arpa"
 
