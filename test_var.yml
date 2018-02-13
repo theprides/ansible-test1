@@ -1,0 +1,20 @@
+---
+- hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: Check1
+    debug:
+      msg: "host={{ inventory_hostname }} ip={{ ip_address }}"
+
+  - name: Get reverse DNS name from IP
+    command: echo "{{ ip_address | ipaddr('revdns') }}"
+    register: revname
+
+  - name: Get reverse DNS zone from IP
+    shell: echo "{{ ip_address | ipaddr('revdns') }}" | cut -d'.' -f 3,4,5,6,7
+    register: revzone
+
+  - name: showit
+    debug:
+      msg: "revname is {{ revname.stdout }} and rev zone is {{ revzone.stdout }}"
