@@ -83,12 +83,10 @@
       key_secret: "{{ dns_key_secret }}"
       key_algorithm: "{{ dns_key_type }}"
       server: "{{ dns_server }}"
-      zone: "{{ revzone }}."
+      zone: "{{ revzone }}"
       record: "{{ revname }}"
       value: "{{ inventory_hostname }}."
       type: "PTR"
       state: present
     when: not vmstatus.failed
-
-
 
