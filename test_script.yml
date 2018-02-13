@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: test script
+    script: /usr/bin/dns.sh {{ inventory_hostname }} {{ ip_address }} "245.3.192.10.in-addr.arpa"
+
