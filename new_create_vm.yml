@@ -3,6 +3,22 @@
   gather_facts: false
   connection: local
   tasks:
+  - name: Debug check1
+    debug:
+      msg: "host={{ inventory_hostname }} ip={{ ip_address }}"
+
+  - name: Get reverse DNS name from IP
+    command: echo "{{ ip_address | ipaddr('revdns') }}"
+    register: revname
+
+  - name: Get reverse DNS zone from IP
+    shell: echo "{{ ip_address | ipaddr('revdns') }}" | cut -d'.' -f 3,4,5,6,7
+    register: revzone
+
+  - name: Debug check2
+    debug:
+      msg: "revname is {{ revname.stdout }} and rev zone is {{ revzone.stdout }}"
+
   - name: Provision VM
     vmware_guest:
       hostname: "{{ vcenter_host }}"
@@ -54,7 +70,7 @@
       key_secret: "{{ dns_key_secret }}"
       key_algorithm: "{{ dns_key_type }}"
       server: "{{ dns_server }}"
-      zone: "{{ dns_zone }}"
+      zone: "{{ domain }}"
       record: "{{ inventory_hostname }}"
       value: "{{ ip_address }}"
       type: "A"
@@ -67,9 +83,12 @@
       key_secret: "{{ dns_key_secret }}"
       key_algorithm: "{{ dns_key_type }}"
       server: "{{ dns_server }}"
-      zone: "{{ vm_zone }}."
-      record: "{{ vm_arpa_name }}"
+      zone: "{{ revzone }}."
+      record: "{{ revname }}"
       value: "{{ inventory_hostname }}."
       type: "PTR"
       state: present
     when: not vmstatus.failed
+
+
+
