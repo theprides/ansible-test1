@@ -50,7 +50,7 @@
         ip: "{{ ip_address }}"
         device_type: "{{ device_type }}"
         gateway: "{{ gateway }}"
-        domain: "{{ domain }}"
+        domain: "{{ domain.stdout }}"
         netmask: "{{ netmask }}"
         dns_servers:
         - "{{ dns1 }}"
@@ -59,7 +59,7 @@
         dns_servers:
         - "{{ dns1 }}"
         - "{{ dns2 }}"
-        domain: "{{ domain }}"
+        domain: "{{ domain.stdout }}"
         hostName: "{{ inventory_hostname }}"
         computerName: "{{ inventory_hostname }}"
       validate_certs: no
