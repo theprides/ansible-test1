@@ -5,7 +5,32 @@
   vars:
     state: poweredon
   tasks:
-  - name: Remove DNS A record
+  - name: Get reverse DNS name from IP
+    command: echo "{{ ip_address | ipaddr('revdns') }}"
+    register: revname
+    when: state == "absent"
+
+  - name: Get reverse DNS zone from IP
+    shell: echo "{{ ip_address | ipaddr('revdns') }}" | cut -d'.' -f 3,4,5,6,7
+    register: revzone
+    when: state == "absent"
+
+  - name: Get domain from hostname
+    shell: echo "{{ inventory_hostname }}" | cut -d'.' -f 2,3
+    register: domain
+    when: state == "absent"
+
+  - name: Show debug output
+    debug:
+      msg:
+       - "inventory_hostname: {{ inventory_hostname }}"
+       - "ip_address: {{ ip_address }}"
+       - "revname: {{ revname.stdout }}"
+       - "revzone: {{ revzone.stdout }}"
+       - "domain: {{ domain.stdout }}"
+    when: state == "absent"
+
+  - name: Remove DNS A record if disposing of VM
     nsupdate:
       key_name: "{{ dns_key_name }}"
       key_secret: "{{ dns_key_secret }}"
@@ -17,13 +42,13 @@
       type: "A"
     when: state == "absent"
 
-  - name: Remove DNS PTR record
+  - name: Remove DNS PTR record if disposing of VM
     nsupdate:
       key_name: "{{ dns_key_name }}"
       key_secret: "{{ dns_key_secret }}"
       key_algorithm: "{{ dns_key_type }}"
       server: "{{ dns_server }}"
-      zone: "{{ vm_zone }}."
+      zone: "{{ vm_zone }}"
       record: "{{ vm_arpa_name }}"
       value: "{{ inventory_hostname }}."
       type: "PTR"

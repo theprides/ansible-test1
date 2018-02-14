@@ -3,10 +3,6 @@
   gather_facts: false
   connection: local
   tasks:
-  - name: Check
-    debug:
-      msg: "host={{ inventory_hostname }} ip={{ ip_address }}"
-
   - name: Get reverse DNS name from IP
     command: echo "{{ ip_address | ipaddr('revdns') }}"
     register: revname
