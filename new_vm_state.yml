@@ -34,11 +34,11 @@
     nsupdate:
       key_name: "{{ dns_key_name }}"
       key_secret: "{{ dns_key_secret }}"
-      key_algorithm: "{{ dns_key_type }}"
       server: "{{ dns_server }}"
-      zone: "{{ dns_zone }}"
-      record: "{{ inventory_hostname }}"
+      zone: "{{ domain.stdout }}"
+      record: "{{ inventory_hostname }}."
       value: "{{ ip_address }}"
+      ttl: 3000
       type: "A"
     when: state == "absent"
 
@@ -46,11 +46,11 @@
     nsupdate:
       key_name: "{{ dns_key_name }}"
       key_secret: "{{ dns_key_secret }}"
-      key_algorithm: "{{ dns_key_type }}"
       server: "{{ dns_server }}"
-      zone: "{{ vm_zone }}"
-      record: "{{ vm_arpa_name }}"
+      zone: "{{ revzone.stdout }}"
+      record: "{{ revname.stdout }}"
       value: "{{ inventory_hostname }}."
+      ttl: 3000
       type: "PTR"
     when: state == "absent"
 
@@ -74,3 +74,4 @@
       name: "{{ inventory_hostname }}"
       validate_certs: no
       state: "{{ state }}"
+
