@@ -3,7 +3,7 @@
   gather_facts: false
   connection: local
   tasks:
-  - name: Debug check1
+  - name: Check
     debug:
       msg: "host={{ inventory_hostname }} ip={{ ip_address }}"
 
@@ -15,9 +15,18 @@
     shell: echo "{{ ip_address | ipaddr('revdns') }}" | cut -d'.' -f 3,4,5,6,7
     register: revzone
 
-  - name: Debug check2
+  - name: Get domain from hostname
+    shell: echo "{{ inventory_hostname }}" | cut -d'.' -f 2,3
+    register: domain
+
+  - name: Show debug output
     debug:
-      msg: "revname is {{ revname.stdout }} and rev zone is {{ revzone.stdout }}"
+      msg:
+       - "inventory_hostname: {{ inventory_hostname }}"
+       - "ip_address: {{ ip_address }}"
+       - "revname: {{ revname.stdout }}"
+       - "revzone: {{ revzone.stdout }}"
+       - "domain: {{ domain.stdout }}"
 
   - name: Provision VM
     vmware_guest:
@@ -64,28 +73,28 @@
   - debug:
       msg: "Deploy message is: {{ vmstatus }}"
 
-  - name: Add DNS A record
+  - name: Add A record
     nsupdate:
       key_name: "{{ dns_key_name }}"
       key_secret: "{{ dns_key_secret }}"
-      key_algorithm: "{{ dns_key_type }}"
       server: "{{ dns_server }}"
-      zone: "{{ domain }}"
-      record: "{{ inventory_hostname }}"
+      zone: "{{ domain.stdout }}"
+      record: "{{ inventory_hostname }}."
       value: "{{ ip_address }}"
+      ttl: 3000
       type: "A"
       state: present
     when: not vmstatus.failed
 
-  - name: Add DNS PTR record
+  - name: Add PTR record
     nsupdate:
       key_name: "{{ dns_key_name }}"
       key_secret: "{{ dns_key_secret }}"
-      key_algorithm: "{{ dns_key_type }}"
       server: "{{ dns_server }}"
       zone: "{{ revzone.stdout }}"
       record: "{{ revname.stdout }}"
       value: "{{ inventory_hostname }}."
+      ttl: 3000
       type: "PTR"
       state: present
     when: not vmstatus.failed
