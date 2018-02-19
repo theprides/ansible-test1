@@ -7,11 +7,11 @@
   tasks:
   - name: testing
     vmware_guest_facts:
-      hostname: "10.192.1.213"
+      hostname: "{{ vcenter_host }}"
       username: "{{ vcenter_user }}"
       password: "{{ vcenter_pass }}"
       datacenter: "{{ datacenter }}"
-      folder: "{{ datacenter }}/vm/{{ destination_folder }}"
+      folder: "{{ datacenter }}/vm/{{ vmfolder }}"
       name: "{{ inventory_hostname }}"
       validate_certs: no
     register: facts
