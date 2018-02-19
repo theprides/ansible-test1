@@ -1,0 +1,21 @@
+---
+- hosts: trial
+  gather_facts: False
+  connection: local
+  vars_files:
+  - "../keys/vcenter.yml"
+  tasks:
+  - name: testing
+    vmware_guest_facts:
+      hostname: "10.192.1.213"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      datacenter: "{{ datacenter }}"
+      folder: "{{ datacenter }}/vm/{{ destination_folder }}"
+      name: "{{ inventory_hostname }}"
+      validate_certs: no
+    register: facts
+
+  - name: showit
+    debug:
+      msg: "{{ facts }}"`
