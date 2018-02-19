@@ -1,6 +1,7 @@
 ---
-- hosts: trial
-  gather_facts: False
+---
+- hosts: all
+  gather_facts: false
   connection: local
   vars_files:
   - "/var/lib/awx/keys/vcenter.yml"
