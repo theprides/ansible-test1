@@ -3,7 +3,7 @@
   gather_facts: False
   connection: local
   vars_files:
-  - "../keys/vcenter.yml"
+  - "/var/lib/awx/keys/vcenter.yml"
   tasks:
   - name: testing
     vmware_guest_facts:
