@@ -18,4 +18,4 @@
 
   - name: showit
     debug:
-      msg: "{{ facts }}"`
+      msg: "{{ facts }}"
