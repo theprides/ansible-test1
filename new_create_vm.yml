@@ -2,6 +2,9 @@
 - hosts: all
   gather_facts: false
   connection: local
+  vars_files:
+  - "/var/lib/awx/secrets/vcenter.yml"
+  - "/var/lib/awx/secrets/dns.yml"
   tasks:
   - name: Get reverse DNS name from IP
     command: echo "{{ ip_address | ipaddr('revdns') }}"
@@ -71,9 +74,9 @@
 
   - name: Add A record
     nsupdate:
-      key_name: "{{ dns_key_name }}"
-      key_secret: "{{ dns_key_secret }}"
-      server: "{{ dns_server }}"
+      key_name: "{{ dns_key_sfo }}"
+      key_secret: "{{ dns_key_aus }}"
+      server: "{{ dns_server_aus }}"
       zone: "{{ domain.stdout }}"
       record: "{{ inventory_hostname }}."
       value: "{{ ip_address }}"
@@ -84,9 +87,9 @@
 
   - name: Add PTR record
     nsupdate:
-      key_name: "{{ dns_key_name }}"
-      key_secret: "{{ dns_key_secret }}"
-      server: "{{ dns_server }}"
+      key_name: "{{ dns_key_sfo }}"
+      key_secret: "{{ dns_key_aus }}"
+      server: "{{ dns_server_aus }}"
       zone: "{{ revzone.stdout }}"
       record: "{{ revname.stdout }}"
       value: "{{ inventory_hostname }}."
