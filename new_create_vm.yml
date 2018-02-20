@@ -75,8 +75,8 @@
   - name: Add A record
     nsupdate:
       key_name: "{{ dns_key_sfo }}"
-      key_secret: "{{ dns_key_aus }}"
-      server: "{{ dns_server_aus }}"
+      key_secret: "{{ dns_key_sfo }}"
+      server: "{{ dns_server_sfo }}"
       zone: "{{ domain.stdout }}"
       record: "{{ inventory_hostname }}."
       value: "{{ ip_address }}"
@@ -88,8 +88,8 @@
   - name: Add PTR record
     nsupdate:
       key_name: "{{ dns_key_sfo }}"
-      key_secret: "{{ dns_key_aus }}"
-      server: "{{ dns_server_aus }}"
+      key_secret: "{{ dns_key_sfo }}"
+      server: "{{ dns_server_sfo }}"
       zone: "{{ revzone.stdout }}"
       record: "{{ revname.stdout }}"
       value: "{{ inventory_hostname }}."
