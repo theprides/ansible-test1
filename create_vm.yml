@@ -27,6 +27,20 @@
        - "revzone: {{ revzone.stdout }}"
        - "domain: {{ domain.stdout }}"
 
+  - name: Check AUS DNS vars before deploying
+    fail:
+      msg: "A required variable is not defined!"
+    when:
+    - region == "aus"
+    - (dns_key_aus is undefined) or (dns_secret_aus is undefined) or (dns_server_aus is undefined)
+
+  - name: Check SFO DNS vars before deploying
+    fail:
+      msg: "A required variable is not defined!"
+    when:
+    - region == "sfo"
+    - (dns_key_sfo is undefined) or (dns_secret_sfo is undefined) or (dns_server_sfo is undefined)
+
   - name: Provision VM
     vmware_guest:
       hostname: "{{ vcenter_host }}"
@@ -72,7 +86,22 @@
   - debug:
       msg: "Deploy message is: {{ vmstatus }}"
 
-  - name: Add A record
+  - name: Add A record (AUS)
+    nsupdate:
+      key_name: "{{ dns_key_aus }}"
+      key_secret: "{{ dns_key_aus }}"
+      server: "{{ dns_server_aus }}"
+      zone: "{{ domain.stdout }}"
+      record: "{{ inventory_hostname }}."
+      value: "{{ ip_address }}"
+      ttl: 3000
+      type: "A"
+      state: present
+    when:
+    - not vmstatus.failed
+    - region == "aus"
+
+  - name: Add A record (SFO)
     nsupdate:
       key_name: "{{ dns_key_sfo }}"
       key_secret: "{{ dns_key_sfo }}"
@@ -83,9 +112,26 @@
       ttl: 3000
       type: "A"
       state: present
-    when: not vmstatus.failed
+    when:
+    - not vmstatus.failed
+    - region == "sfo"
 
-  - name: Add PTR record
+  - name: Add PTR record (AUS)
+    nsupdate:
+      key_name: "{{ dns_key_aus }}"
+      key_secret: "{{ dns_key_aus }}"
+      server: "{{ dns_server_aus }}"
+      zone: "{{ revzone.stdout }}"
+      record: "{{ revname.stdout }}"
+      value: "{{ inventory_hostname }}."
+      ttl: 3000
+      type: "PTR"
+      state: present
+    when:
+    - not vmstatus.failed
+    - region == "aus"
+
+  - name: Add PTR record (SFO)
     nsupdate:
       key_name: "{{ dns_key_sfo }}"
       key_secret: "{{ dns_key_sfo }}"
@@ -96,5 +142,7 @@
       ttl: 3000
       type: "PTR"
       state: present
-    when: not vmstatus.failed
+    when:
+    - not vmstatus.failed
+    - region == "sfo"
 
