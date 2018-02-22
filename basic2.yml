@@ -29,6 +29,7 @@
       disk:
       - size_gb: 10
         type: "thin"
+        datastore: "{{ datastore }}"
         autoselect_datastore: yes
       hardware:
         memory_mb: 1024
