@@ -89,7 +89,7 @@
   - name: Add A record (AUS)
     nsupdate:
       key_name: "{{ dns_key_aus }}"
-      key_secret: "{{ dns_key_aus }}"
+      key_secret: "{{ dns_secret_aus }}"
       server: "{{ dns_server_aus }}"
       zone: "{{ domain.stdout }}"
       record: "{{ inventory_hostname }}."
@@ -104,7 +104,7 @@
   - name: Add A record (SFO)
     nsupdate:
       key_name: "{{ dns_key_sfo }}"
-      key_secret: "{{ dns_key_sfo }}"
+      key_secret: "{{ dns_secret_sfo }}"
       server: "{{ dns_server_sfo }}"
       zone: "{{ domain.stdout }}"
       record: "{{ inventory_hostname }}."
@@ -119,7 +119,7 @@
   - name: Add PTR record (AUS)
     nsupdate:
       key_name: "{{ dns_key_aus }}"
-      key_secret: "{{ dns_key_aus }}"
+      key_secret: "{{ dns_secret_aus }}"
       server: "{{ dns_server_aus }}"
       zone: "{{ revzone.stdout }}"
       record: "{{ revname.stdout }}"
@@ -134,7 +134,7 @@
   - name: Add PTR record (SFO)
     nsupdate:
       key_name: "{{ dns_key_sfo }}"
-      key_secret: "{{ dns_key_sfo }}"
+      key_secret: "{{ dns_secret_sfo }}"
       server: "{{ dns_server_sfo }}"
       zone: "{{ revzone.stdout }}"
       record: "{{ revname.stdout }}"
