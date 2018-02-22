@@ -3,7 +3,7 @@
   gather_facts: false
   connection: local
   vars_files:
-  - "../../keys/vmware1.yml"
+  - "../../keys/vcenter1.yml"
   - "../../keys/dns1.yml"
   tasks:
   - name: Check DNS vars before deploying
