@@ -6,40 +6,17 @@
   - "/var/lib/awx/secrets/vcenter.yml"
   - "/var/lib/awx/secrets/dns.yml"
   tasks:
-  - name: Get reverse DNS name from IP
-    command: echo "{{ ip_address | ipaddr('revdns') }}"
-    register: revname
-
-  - name: Get reverse DNS zone from IP
-    shell: echo "{{ ip_address | ipaddr('revdns') }}" | cut -d'.' -f 3,4,5,6,7
-    register: revzone
-
-  - name: Get domain from hostname
-    shell: echo "{{ inventory_hostname }}" | cut -d'.' -f 2,3
-    register: domain
-
-  - name: Show debug output
-    debug:
-      msg:
-       - "inventory_hostname: {{ inventory_hostname }}"
-       - "ip_address: {{ ip_address }}"
-       - "revname: {{ revname.stdout }}"
-       - "revzone: {{ revzone.stdout }}"
-       - "domain: {{ domain.stdout }}"
-
   - name: Check AUS DNS vars before deploying
     fail:
       msg: "A required variable is not defined!"
-    when:
-    - region == "aus"
-    - (dns_key_aus is undefined) or (dns_secret_aus is undefined) or (dns_server_aus is undefined)
+    tags: aus
+    when: (dns_key_aus is undefined) or (dns_secret_aus is undefined) or (dns_server_aus is undefined)
 
   - name: Check SFO DNS vars before deploying
     fail:
       msg: "A required variable is not defined!"
-    when:
-    - region == "sfo"
-    - (dns_key_sfo is undefined) or (dns_secret_sfo is undefined) or (dns_server_sfo is undefined)
+    tags: sfo
+    when: (dns_key_sfo is undefined) or (dns_secret_sfo is undefined) or (dns_server_sfo is undefined)
 
   - name: Provision VM
     vmware_guest:
@@ -97,9 +74,8 @@
       ttl: 3000
       type: "A"
       state: present
-    when:
-    - not vmstatus.failed
-    - region == "aus"
+    tags: aus
+    when: not vmstatus.failed
 
   - name: Add A record (SFO)
     nsupdate:
@@ -112,9 +88,8 @@
       ttl: 3000
       type: "A"
       state: present
-    when:
-    - not vmstatus.failed
-    - region == "sfo"
+    tags: sfo
+    when: not vmstatus.failed
 
   - name: Add PTR record (AUS)
     nsupdate:
@@ -127,9 +102,8 @@
       ttl: 3000
       type: "PTR"
       state: present
-    when:
-    - not vmstatus.failed
-    - region == "aus"
+    tags: aus
+    when: not vmstatus.failed
 
   - name: Add PTR record (SFO)
     nsupdate:
@@ -142,7 +116,6 @@
       ttl: 3000
       type: "PTR"
       state: present
-    when:
-    - not vmstatus.failed
-    - region == "sfo"
+    tags: sfo
+    when: not vmstatus.failed
 
