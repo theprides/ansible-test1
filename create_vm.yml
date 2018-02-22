@@ -18,6 +18,27 @@
     tags: sfo
     when: (dns_key_sfo is undefined) or (dns_secret_sfo is undefined) or (dns_server_sfo is undefined)
 
+  - name: Get reverse DNS name from IP
+    command: echo "{{ ip_address | ipaddr('revdns') }}"
+    register: revname
+
+  - name: Get reverse DNS zone from IP
+    shell: echo "{{ ip_address | ipaddr('revdns') }}" | cut -d'.' -f 3,4,5,6,7
+    register: revzone
+
+  - name: Get domain from hostname
+    shell: echo "{{ inventory_hostname }}" | cut -d'.' -f 2,3
+    register: domain
+
+  - name: Show debug output
+    debug:
+      msg:
+       - "inventory_hostname: {{ inventory_hostname }}"
+       - "ip_address: {{ ip_address }}"
+       - "revname: {{ revname.stdout }}"
+       - "revzone: {{ revzone.stdout }}"
+       - "domain: {{ domain.stdout }}"
+
   - name: Provision VM
     vmware_guest:
       hostname: "{{ vcenter_host }}"
