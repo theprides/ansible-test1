@@ -64,5 +64,5 @@
       msg: "Deploy message is: {{ vmstatus }}"
 
   - name: Add DNS records
-    local_action: script /usr/bin/dns-add.sh {{ inventory_hostname }} {{ ip_address }} {{ revname }}
+    local_action: script /usr/bin/dns-add.sh {{ inventory_hostname }} {{ ip_address }} {{ revname.stdout }}
 
