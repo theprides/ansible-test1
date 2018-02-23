@@ -14,6 +14,10 @@
        - "ip_address: {{ ip_address }}"
        - "revname: {{ revname.stdout }}"
 
+  - name: Show output
+    debug:
+      msg: "script /usr/bin/dns-add.sh {{ inventory_hostname }} {{ ip_address }} {{ revname }}"
+
   - name: Add DNS records
     local_action: script /usr/bin/dns-add.sh "{{ inventory_hostname }}" "{{ ip_address }}" "{{ revname }}"
 
