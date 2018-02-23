@@ -1,0 +1,45 @@
+---
+- hosts: all
+  gather_facts: false
+  connection: local
+  vars:
+    state: poweredon
+  tasks:
+  - name: Get reverse DNS name from IP
+    command: echo "{{ ip_address | ipaddr('revdns') }}"
+    register: revname
+    when: state == "absent"
+
+  - name: Show debug output
+    debug:
+      msg:
+       - "inventory_hostname: {{ inventory_hostname }}"
+       - "ip_address: {{ ip_address }}"
+       - "revname: {{ revname.stdout }}"
+    when: state == "absent"
+
+  - name: Remove DNS records
+    local_action: script /usr/bin/dns-rm.sh {{ inventory_hostname }} {{ ip_address }} {{ revname.stdout }}
+    when: state == "absent"
+
+  - name: Shutdown VM first if delete required
+    vmware_guest:
+      hostname: "{{ vcenter_host }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      folder: "{{ vcenter_datacenter }}/vm/{{ vcenter_folder }}"
+      name: "{{ inventory_hostname }}"
+      validate_certs: no
+      state: "poweredoff"
+    when: state == "absent"
+
+  - name: Set VM to desired state
+    vmware_guest:
+      hostname: "{{ vcenter_host }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      folder: "{{ vcenter_datacenter }}/vm/{{ vcenter_folder }}"
+      name: "{{ inventory_hostname }}"
+      validate_certs: no
+      state: "{{ state }}"
+
