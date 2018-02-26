@@ -1,0 +1,19 @@
+---
+- hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: cwGather facts about VM
+    vmware_guest_facts:
+      hostname: "{{ vcenter_host }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      datacenter: "{{ datacenter }}"
+      folder: "{{ datacenter }}/vm/{{ vmfolder }}"
+      name: "{{ inventory_hostname }}"
+      validate_certs: no
+    register: facts
+
+  - name: Show information about VM
+    debug:
+      msg: "{{ facts }}"
