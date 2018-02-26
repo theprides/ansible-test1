@@ -3,13 +3,12 @@
   gather_facts: false
   connection: local
   tasks:
-  - name: cwGather facts about VM
+  - name: Gather facts about VM
     vmware_guest_facts:
       hostname: "{{ vcenter_host }}"
       username: "{{ vcenter_user }}"
       password: "{{ vcenter_pass }}"
-      datacenter: "{{ datacenter }}"
-      folder: "{{ datacenter }}/vm/{{ vmfolder }}"
+      folder: "{{ vcenter_datacenter }}/vm/{{ vcenter_folder }}"
       name: "{{ inventory_hostname }}"
       validate_certs: no
     register: facts
