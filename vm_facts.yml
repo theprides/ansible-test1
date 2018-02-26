@@ -8,6 +8,7 @@
       hostname: "{{ vcenter_host }}"
       username: "{{ vcenter_user }}"
       password: "{{ vcenter_pass }}"
+      ddatacenter: "{{ vcenter_datacenter }}"
       folder: "{{ vcenter_datacenter }}/vm/{{ vcenter_folder }}"
       name: "{{ inventory_hostname }}"
       validate_certs: no
