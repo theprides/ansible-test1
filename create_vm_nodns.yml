@@ -16,8 +16,8 @@
       datacenter: "{{ vcenter_datacenter }}"
       guest_id: "{{ vcenter_guestos }}"
       disk:
-      - size_gb: 8
-        type: "thin"
+      - size_gb: 40
+        type: "thick"
         datastore: "{{ vcenter_datastore }}"
       hardware:
         memory_mb: "{{ vm_memory }}"
