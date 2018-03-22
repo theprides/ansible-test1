@@ -19,9 +19,6 @@
       - size_gb: "{{ vm_diskgb }}"
         type: "thick"
         datastore: "{{ vcenter_datastore }}"
-      hardware:
-        memory_mb: "{{ vm_memory }}"
-        num_cpus: "{{ vm_cpus }}"
       networks:
       - name: "{{ network_name }}"
         ip: "{{ ip_address }}"
