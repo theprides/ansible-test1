@@ -1,0 +1,24 @@
+---
+- hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: Expand disk size
+    vmware_guest:
+      hostname: "{{ vcenter_host }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      name: "{{ inventory_hostname }}"
+      folder: "{{ vcenter_folder }}"
+      template: "{{ vcenter_template }}"
+      cluster: "{{ vcenter_cluster }}"
+      resource_pool: "{{ vcenter_resource_pool }}"
+      datacenter: "{{ vcenter_datacenter }}"
+      guest_id: "{{ vcenter_guestos }}"
+      disk:
+      - size_gb: "{{ vm_diskgb }}"
+        type: "thick"
+        datastore: "{{ vcenter_datastore }}"
+      validate_certs: no
+      state: present
+    register: vmstatus
