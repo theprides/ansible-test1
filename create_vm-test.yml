@@ -3,6 +3,10 @@
   gather_facts: false
   connection: local
   tasks:
+  - name: Get domain from hostname
+    shell: echo "{{ inventory_hostname }}" | cut -d'.' -f 2,3
+    register: domain
+
   - name: Provision VM
     vmware_guest:
       hostname: "{{ vcenter_host }}"
