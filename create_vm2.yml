@@ -26,7 +26,6 @@
       networks:
       - name: "{{ network_name }}"
         ip: "{{ ip_address }}"
-        device_type: "{{ device_type }}"
         gateway: "{{ gateway }}"
         domain: "{{ domain.stdout }}"
         netmask: "{{ netmask }}"
