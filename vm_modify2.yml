@@ -1,0 +1,32 @@
+---
+- hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: Modify VM
+    vmware_guest:
+      hostname: "{{ vcenter_host }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      name: "{{ inventory_hostname }}"
+      folder: "{{ vcenter_folder }}"
+      template: "{{ vcenter_template }}"
+      cluster: "{{ vcenter_cluster }}"
+      resource_pool: "{{ vcenter_resource_pool }}"
+      datacenter: "{{ vcenter_datacenter }}"
+      guest_id: "{{ vcenter_guestos }}"
+      disk:
+      - size_gb: "{{ vm_diskgb }}"
+        type: "thick"
+        datastore: "{{ vcenter_datastore }}"
+      hardware:
+        memory_mb: "{{ vm_memory }}"
+        num_cpus: "{{ vm_cpus }}"
+      wait_for_ip_address: yes
+      validate_certs: no
+      state: present
+    register: vmstatus
+
+  - debug:
+      msg: "Deploy message is: {{ vmstatus }}"
+
