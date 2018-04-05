@@ -39,7 +39,7 @@
         - "{{ dns2 }}"
       customization:
         domainadmin: "{{ domain_user }}"
-        domainadminpassword: {{ domain_pass }}"
+        domainadminpassword: "{{ domain_pass }}"
         joindomain: "{{domain_name }}"
         orgname: "{{ org_name }}"
         password: "{{ admin_pass }}"
