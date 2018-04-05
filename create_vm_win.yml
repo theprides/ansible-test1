@@ -38,13 +38,8 @@
         - "{{ dns1 }}"
         - "{{ dns2 }}"
       customization:
-        #domainadmin: "{{ domain_user }}"
-        #domainadminpassword: "{{ domain_pass }}"
-        #joindomain: "{{domain_name }}"
         orgname: "{{ org_name }}"
         password: "{{ admin_pass }}"
-        #productid: "{{ product_id }}"
-        #runonce: "{{ cmds_to_run }}"
         dns_servers:
         - "{{ dns1 }}"
         - "{{ dns2 }}"
