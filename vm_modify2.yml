@@ -1,4 +1,10 @@
 ---
+# ----------------------------------------------------------
+# Modifies VM by extending existing hard disk, change CPU
+# count, and/or changing memory size.
+#
+# AWX 1.0.5  v1.0.0
+# ----------------------------------------------------------
 - hosts: all
   gather_facts: false
   connection: local

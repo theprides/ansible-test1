@@ -1,4 +1,9 @@
 ---
+# ----------------------------------------------------------
+# Modifies VM by extending existing hard disk.
+#
+# AWX 1.0.5  v1.0.0
+# ----------------------------------------------------------
 - hosts: all
   gather_facts: false
   connection: local

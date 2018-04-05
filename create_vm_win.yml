@@ -1,6 +1,6 @@
 ---
 # ----------------------------------------------------------
-# Provisions VM(s) and creates DNS records
+# Provisions Windows VM(s) and creates DNS records
 #
 # AWX 1.0.5  v1.0.0
 # ----------------------------------------------------------
@@ -8,21 +8,9 @@
   gather_facts: false
   connection: local
   tasks:
-  - name: Get reverse DNS name from IP
-    command: echo "{{ ip_address | ipaddr('revdns') }}"
-    register: revname
-
   - name: Get domain from hostname
     shell: echo "{{ inventory_hostname }}" | cut -d'.' -f 2,3
     register: domain
-
-  - name: Show debug output
-    debug:
-      msg:
-       - "inventory_hostname: {{ inventory_hostname }}"
-       - "ip_address: {{ ip_address }}"
-       - "revname: {{ revname.stdout }}"
-       - "domain: {{ domain.stdout }}"
 
   - name: Provision VM
     vmware_guest:
@@ -50,12 +38,18 @@
         - "{{ dns1 }}"
         - "{{ dns2 }}"
       customization:
+        domainadmin: "{{ domain_user }}"
+        domainadminpassword: {{ domain_pass }}"
+        joindomain: "{{domain_name }}"
+        orgname: "{{ org_name }}"
+        password: "{{ admin_pass }}"
+        productid: "{{ product_id }}"
+        runonce: "{{ cmds_to_run }}"
         dns_servers:
         - "{{ dns1 }}"
         - "{{ dns2 }}"
         domain: "{{ domain.stdout }}"
-        hostName: "{{ inventory_hostname }}"
-        computerName: "{{ inventory_hostname }}"
+        hostname: "{{ inventory_hostname }}"
       wait_for_ip_address: yes
       validate_certs: no
       state: present
@@ -63,7 +57,3 @@
 
   - debug:
       msg: "Deploy message is: {{ vmstatus }}"
-
-  - name: Add DNS records
-    local_action: script /usr/bin/dns-add.sh {{ inventory_hostname }} {{ ip_address }} {{ revname.stdout }}
-
