@@ -49,7 +49,8 @@
         - "{{ dns1 }}"
         - "{{ dns2 }}"
         domain: "{{ domain.stdout }}"
-        hostname: "{{ inventory_hostname }}"
+        hostName: "{{ inventory_hostname }}"
+        computerName: "{{ inventory_hostname }}"
       wait_for_ip_address: yes
       validate_certs: no
       state: present
