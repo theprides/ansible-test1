@@ -53,7 +53,7 @@
         computerName: "{{ inventory_hostname }}"
       wait_for_ip_address: yes
       validate_certs: no
-      state: present
+      state: poweredon
     register: vmstatus
 
   - debug:
