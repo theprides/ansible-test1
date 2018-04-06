@@ -38,6 +38,11 @@
         - "{{ dns1 }}"
         - "{{ dns2 }}"
       customization:
+        autologon: True
+        autologoncount: 3
+        domainadmin: "{{ domain_admin }}"
+        domaindminpassword: "{{ domain_pass }}"
+        joindomain: "{{ join_domain }}"
         orgname: "{{ org_name }}"
         password: "{{ admin_pass }}"
         dns_servers:
