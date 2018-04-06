@@ -4,5 +4,5 @@
   connection: local
   tasks:
   - debug:
-      msg: "winad_user is {{ winad_user }} - winad_pass is {{ winad_pass }}"
+      msg: "{{ wadmin_password }} {{ wadmin_username }} {{ wdomain_password }} {{ wdomain_username }} {{ wproductid }}"
 
