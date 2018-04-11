@@ -8,9 +8,17 @@
   gather_facts: false
   connection: local
   tasks:
+  - name: Get reverse DNS name from IP
+    command: echo "{{ ip_address | ipaddr('revdns') }}"
+    register: revname
+
   - name: Get domain from hostname
     shell: echo "{{ inventory_hostname }}" | cut -d'.' -f 2,3
     register: domain
+
+  - name: Get tenant from hostname
+    shell: echo "{{ inventory_hostname }}" | cut -d'.' -f 2 | cut -d'-' -f 1
+    register: tenant
 
   - name: Provision VM
     vmware_guest:
@@ -40,10 +48,8 @@
       customization:
         autologon: True
         autologoncount: 3
-        domainadmin: "{{ domain_admin }}"
-        domaindminpassword: "{{ domain_pass }}"
-        joindomain: "{{ join_domain }}"
-        orgname: "{{ org_name }}"
+        orgname: "Snapfish"
+        fullname: "Administrator"
         password: "{{ admin_pass }}"
         dns_servers:
         - "{{ dns1 }}"
@@ -51,6 +57,8 @@
         domain: "{{ domain.stdout }}"
         hostName: "{{ inventory_hostname }}"
         computerName: "{{ inventory_hostname }}"
+        runonce:
+        - powershell.exe -ExecutionPolicy ByPass -File C:\VRMGuestAgent\customize.ps1 -hostname {{ inventory_hostname }} -grp {{ tenant.stdout }}
       wait_for_ip_address: yes
       validate_certs: no
       state: poweredon
@@ -58,3 +66,6 @@
 
   - debug:
       msg: "Deploy message is: {{ vmstatus }}"
+
+  - name: Add DNS records
+    local_action: script /usr/bin/dns-add.sh {{ inventory_hostname }} {{ ip_address }} {{ revname.stdout }}
