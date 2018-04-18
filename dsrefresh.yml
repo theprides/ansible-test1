@@ -5,3 +5,8 @@
   tasks:
   - name: testing
     local_action: script /usr/bin/getBestDatastores.py {{ vcenter_host }} {{ cred_user }} {{ cred_pass }} {{ dsfolder }}
+    register: result
+
+  - name: Show debug output
+    debug:
+      msg: "{{ result.stdout }}"
