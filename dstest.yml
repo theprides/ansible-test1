@@ -1,0 +1,12 @@
+---
+- hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: testing
+    local_action: script /usr/bin/getDatastore.sh {{ fname }}
+    register: datastore
+
+  - name: Show debug output
+    debug:
+      msg: "{{ datastore.stdout }}"
