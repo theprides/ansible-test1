@@ -17,7 +17,7 @@
     register: domain
 
   - name: Get preferred datastore
-    local_action: script /usr/bin/getDatastore.sh DaaS
+    local_action: script /usr/bin/getDatastore.sh {{ ds_folder_id }}
     register: datastore
 
   - name: Show debug output
