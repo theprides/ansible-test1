@@ -1,3 +1,3 @@
 # ansible-test1
 
-moodified in stpride/master branch
+modified in stpride/master branch
